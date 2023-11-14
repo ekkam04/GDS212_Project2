@@ -4,67 +4,64 @@ using UnityEngine;
 
 public class Grapple : MonoBehaviour
 {
-    public Transform cam;
-    public Transform guntip;
-    public LayerMask whatIsGrappleable;
-    public LineRenderer grappleline;
+    public GameObject grapplePoint;
+    public GameObject grappleBuddy;
 
-    public float maxGrappleDistance;
-    public float grappleDelayTime;
+    public float maxGrappledistance = 20f;
+    public float distanceBetweenObjects;
+    public LayerMask GrapplePoint;
+    public bool isGrappled;
 
-    private Vector3 grapplePoint;
+    public LineRenderer grapple;
 
-    public float grappleCD;
-    private float grappleCDTimer;
 
-    [SerializeField] public KeyCode grappleKey = KeyCode.Mouse0;
+    public float GrappleCD;
+    public float grappleDelayTimer;
 
-    private bool grappling;
-
-    private void Start()
+    public void Update()
     {
-        
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(grappleKey)) StartGrapple();
-
-        if (grappleCDTimer > 0)
-            grappleCDTimer -= Time.deltaTime;
-    }
-
-    private void StartGrapple()
-    {
-        if (grappleCD > 0) return;
-
-        grappling = true;
-
-        RaycastHit hit;
-
-        if (Physics.Raycast(cam.position, cam.forward, out hit, maxGrappleDistance, whatIsGrappleable))
+        Debug.DrawRay(grappleBuddy.transform.position, grapplePoint.transform.position - grappleBuddy.transform.position, Color.blue); 
+        if (Input.GetKeyDown(KeyCode.E))
         {
-            grapplePoint = hit.point;
-            Invoke(nameof(ExecuteGrapple), grappleDelayTime);
+
+            distanceBetweenObjects = Vector3.Distance(grapplePoint.transform.position, grappleBuddy.transform.position);
+
+            print(distanceBetweenObjects);
+
+
+
+            RaycastHit hit;
+
+            if (Physics.Raycast(grappleBuddy.transform.position, grapplePoint.transform.position - grappleBuddy.transform.position, out hit, maxGrappledistance, GrapplePoint))
+            {
+                Debug.DrawRay(grappleBuddy.transform.position, grapplePoint.transform.position - grappleBuddy.transform.position,Color.red);
+                Debug.Log("Did Hit");
+                grapple.SetPosition(0, grappleBuddy.transform.position);
+                grapple.SetPosition(1, grapplePoint.transform.position);
+            }
+            else
+            {
+
+                Debug.Log("Did not Hit");
+            }
         }
-        else
-        {
-            grapplePoint = cam.position + cam.forward * maxGrappleDistance;
-
-            Invoke(nameof(ExecuteGrapple), grappleDelayTime);
-        }
-
-
-
     }
-    private void ExecuteGrapple()
+
+    public void Startgrapple()
     {
 
     }
-    private void StopGrapple()
+     public void Executegrapple()
     {
-        grappling = false;
 
-        grappleCDTimer = grappleCD;
     }
+    public void Exitgrapple()
+    {
+
+    }
+
+
+
 }
+
+    

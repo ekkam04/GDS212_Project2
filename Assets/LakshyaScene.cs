@@ -6,11 +6,18 @@ using UnityEngine.SceneManagement;
 
 public class LakshyaScene : MonoBehaviour
 {
-    private void OnTriggerEnter(Collider other)
+
+    public void OnCollisionEnter(Collision collision)
     {
-        if (other.tag == "Player")
+        if (collision.gameObject.tag == "Player")
         {
-            SceneManager.LoadScene(4);
+            Debug.Log("ldfkgjlkdfj");
+
         }
+    }
+
+    public void Update()
+    {
+        
     }
 }
